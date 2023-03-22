@@ -4,9 +4,8 @@ obj/
 .vs/
 node_modules/
 package-lock.json
+appsettings.*.json
 .DS_Store
-*.*.json
-Features/*.css
-Features/*.css.map
 
-
+BlazingTrails/Client/Features/**/*.razor.css
+BlazingTrails/Client/Features/**/*.razor.css.map
