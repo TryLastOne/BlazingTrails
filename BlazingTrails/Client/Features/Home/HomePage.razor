@@ -1,5 +1,5 @@
 @page "/"
-
+@using BlazingTrails.Client.Features.Learning
 
 @inject HttpClient Http
 <PageTitle>Blazing Trails</PageTitle>
@@ -10,15 +10,19 @@
 }
 else
 {
+    <TrailDetails Trail="SelectedTrail" />
     <div class="grid">
         @foreach (var trail in _trails)
         {
-            <TrailCard Trail="trail" />
+            <TrailCard Trail="trail" OnSelected="HandleTrailSelected" />
         }
     </div>
 }
 
+<LifeCycleAsync />
+
 @code {
+    private Trail? SelectedTrail { get; set; }
     private IEnumerable<Trail>? _trails;
 
     protected override async Task OnInitializedAsync()
@@ -33,4 +37,8 @@ else
         }
     }
 
+    private void HandleTrailSelected(Trail trail)
+    {
+        SelectedTrail = trail;
+    }
 }

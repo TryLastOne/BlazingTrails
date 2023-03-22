@@ -1,0 +1,74 @@
+@implements IDisposable
+<h3>Component Lifecycle</h3>
+<p>Check the browser console for details...</p>
+
+@code {
+    
+    /*
+     * Set the values for any parameter the component defines
+     * When: occurs both first time the component is rendered  and whenever parameters could have changed
+     */
+    public override async Task SetParametersAsync(ParameterView parameters)
+    {
+        Console.WriteLine($"[{DateTime.Now}]- Set Parameters Async - Begin");
+        await base.SetParametersAsync(parameters);
+        Console.WriteLine($"[{DateTime.Now}]- Set Parameters Async - End ");
+        
+    }
+    
+
+    /*
+     *  Initialized section
+     *  Only runs at first render, the component hasn't been initialized.
+     *  Only runs ONCE in a component's lifetime.
+     *
+     * The good place to make an API calls.
+     */
+    
+    protected override void OnInitialized()
+        => Console.WriteLine($"[{DateTime.Now}]- OnInitialized");
+
+    protected override Task OnInitializedAsync()
+    {
+        Console.WriteLine($"[{DateTime.Now}]- OnInitializeAsync");
+        return Task.CompletedTask;
+    }
+    
+    /*
+     *  End Initialization
+     */
+
+    
+    /*
+     *  OnParameterSet and OnParameterSetAsync allow developers to perform actions
+     * whenever a component's parameters change.
+     */
+    protected override void OnParametersSet()
+        => Console.WriteLine($"[{DateTime.Now}]- OnParameterSet");
+
+    protected override Task OnParametersSetAsync()
+    {
+        Console.WriteLine($"[{DateTime.Now}]- OnParameterSetAsync");
+        return Task.CompletedTask;
+    }
+    
+    /*
+     *  OnAfterRender and OnAfterRenderAsync accept a Boolean value.
+     *  This boolean value is useful because it allows ONE-TIME operations to be performed
+     *  when the component is first rendered.
+     */
+    
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        Console.WriteLine($"[{DateTime.Now}]- OnAfterRender(firstRender: {firstRender})");
+    }
+
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        Console.WriteLine($"[{DateTime.Now}]- OnAfterRenderAsync(firstRender: {firstRender})");
+        return Task.CompletedTask;
+    }
+
+    public void Dispose() => Console.WriteLine("Component is disposed");
+}
