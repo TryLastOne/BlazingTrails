@@ -1,4 +1,27 @@
-﻿<Router AppAssembly="@typeof(App).Assembly">
+﻿<!-- 
+Router component use reflection to scan for page components
+
+1) AppAssembly is used to tell the router where to scan.
+2) Found template is where page component that match a requested route are loaded.
+3) NotFound template is shown when the router can't find a match for the requested
+route in its routing table.
+
+
+Responsibility:
+
+- Router component uses reflection to scan the application's assemblies to find "routable components" (can called 
+page component). Page components are component with a special directive declared in them called "page directive"
+Note: if page components are in multiple assemblies. They are declared in AdditionalAssemblies parameter
+
+- page directive allows us to specify what route the component will be loaded for.
+
+- After scanned completely, Router stores the type of component and route it handles in a ROUTING TABLE. From there, router listens for navigation events via the process a link being clicked.
+- Router subscribes to NavigationManager LocationChanged event. When this event is fired, the router checks the URI property
+of NavigationManager against its routing table to find a match.
+
+-->
+
+<Router AppAssembly="@typeof(App).Assembly">
     <Found Context="routeData">
         <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
         <FocusOnNavigate RouteData="@routeData" Selector="h1" />
