@@ -5,13 +5,13 @@
     <input id="maxLength"
            type="number"
            class="form-control"
-           @bind="MaxLength"/>
+           @bind="_maxLength"/>
 
     <label for="maxTime">Max Time (Hours)</label>
     <input id="maxTime"
            type="number"
            class="form-control"
-           @bind="MaxTime"/>
+           @bind="_maxTime"/>
     <button class="btn btn-outline-primary"
             @onclick="FilterSearchResults">
         Filter
