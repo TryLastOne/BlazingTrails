@@ -1,7 +1,6 @@
 @page "/search/{SearchTerm}"
 
 @inject HttpClient Http
-@inject NavigationManager NavManager
 <PageTitle>Search Trails - Blazing Trails</PageTitle>
 
 <nav aria-label="breadcrumb">
@@ -16,6 +15,7 @@
 </nav>
 
 <h3 class="mt-5 mb-4">Search results for "@SearchTerm"</h3>
+<SearchFilter SearchTerm="@SearchTerm" MaxLength="@MaxLength" MaxTime="@MaxTime" />
 
 @if (SearchResult is null)
 {
@@ -35,11 +35,18 @@ else
 
 @code {
     
+    private IEnumerable<Trail> _cachedSearchResult = Array.Empty<Trail>();
     private IEnumerable<Trail>? SearchResult { get; set;}
     private Trail? SelectedTrail { get; set;}
 
     [Parameter]
     public string SearchTerm { get; set; } = string.Empty;
+    
+    [Parameter, SupplyParameterFromQuery]
+    public int? MaxLength { get; set; }
+    
+    [Parameter, SupplyParameterFromQuery]
+    public int? MaxTime { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -48,7 +55,7 @@ else
             var trails = await Http.GetFromJsonAsync<IEnumerable<Trail>>("trails/trails.json");
             if (trails is null) return;
 
-            SearchResult = trails.Where(x => x.Name.Contains(SearchTerm, StringComparison.CurrentCultureIgnoreCase)
+            _cachedSearchResult = trails.Where(x => x.Name.Contains(SearchTerm, StringComparison.CurrentCultureIgnoreCase)
                                              || x.Location.Contains(SearchTerm, StringComparison.CurrentCultureIgnoreCase));
 
         }
@@ -64,8 +71,29 @@ else
         }
     }
 
+    protected override void OnParametersSet()
+        => UpdateFilters();
+
 
     private void HandleTrailSelected(Trail trail)
         => SelectedTrail = trail;
+
+    private void UpdateFilters()
+    {
+        var filters = new List<Func<Trail, bool>>();
+
+        if (MaxLength > 0)
+        {
+            filters.Add(x => x.Length <= MaxLength);
+        }
+
+        if (MaxTime > 0)
+        {
+            filters.Add(x => x.TimeInMinutes <= MaxTime * 60);
+        }
+
+        SearchResult = filters.Any() ? _cachedSearchResult.Where(trail => filters.All(filter => filter(trail))) 
+                                     : _cachedSearchResult;
+    }
 
 }

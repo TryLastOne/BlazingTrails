@@ -1,0 +1,67 @@
+@inject NavigationManager NavManager
+
+<div class="filters">
+    <label for="maxLength">Max Length</label>
+    <input id="maxLength"
+           type="number"
+           class="form-control"
+           @bind="MaxLength"/>
+
+    <label for="maxTime">Max Time (Hours)</label>
+    <input id="maxTime"
+           type="number"
+           class="form-control"
+           @bind="MaxTime"/>
+    <button class="btn btn-outline-primary"
+            @onclick="FilterSearchResults">
+        Filter
+    </button>
+    <button class="btn btn-outline-secondary"
+            @onclick="ClearSearchFilter">
+        Clear
+    </button>
+</div>
+
+@code {
+
+    [Parameter]
+    public int? MaxLength { get; set; }
+    
+    [Parameter]
+    public int? MaxTime { get; set; }
+
+    private int _maxLength;
+    private int _maxTime;
+
+    [Parameter, EditorRequired]
+    public string SearchTerm { get; set; } = default!;
+
+    protected override void OnInitialized()
+    {
+        _maxLength = MaxLength ?? 0;
+        _maxTime = MaxTime ?? 0;
+    }
+
+    private void FilterSearchResults()
+    {
+        if (MaxLength <= 0)
+        {
+            ClearSearchFilter();
+        }
+
+       var searchPageWithQueryParams =  NavManager.GetUriWithQueryParameters(new Dictionary<string, object?>()
+        {
+            [nameof(SearchPage.MaxLength)] = _maxLength == 0 ? null : _maxLength,
+            [nameof(SearchPage.MaxTime)] = _maxTime == 0 ? null : _maxTime
+        });
+        
+        NavManager.NavigateTo(searchPageWithQueryParams);
+    }
+
+    private void ClearSearchFilter()
+    {
+        MaxLength = 0;
+        NavManager.NavigateTo($"/search/{SearchTerm}");
+    }
+
+}
