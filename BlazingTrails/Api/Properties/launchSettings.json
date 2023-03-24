@@ -9,11 +9,11 @@
     }
   },
   "profiles": {
-    "BlazingTrails.Api": {
+    "API": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": false,     
-      "applicationUrl": "https://localhost:7033/;http://localhost:5075/",
+      "applicationUrl": "https://localhost:7033",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

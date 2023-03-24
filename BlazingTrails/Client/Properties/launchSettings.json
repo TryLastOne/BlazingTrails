@@ -8,11 +8,10 @@
     }
   },
   "profiles": {
-    "BlazingTrails": {
+    "Client": {
       "commandName": "Project",
-      "launchBrowser": true,
-      "inspectUri": "{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}",
-      "applicationUrl": "https://localhost:7013;http://localhost:5106",
+      "launchBrowser": true,     
+      "applicationUrl": "https://localhost:7013",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
