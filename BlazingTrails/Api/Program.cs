@@ -1,4 +1,5 @@
 using BlazingTrails.Api.Persistence;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("BlazingTrailsContext");
 builder.Services.AddDbContext<BlazingTrailsContext>(options => options.UseSqlite(connectionString));
 builder.Services.AddControllers();
+builder.Services.AddFluentValidationAutoValidation()
+                .AddFluentValidationClientsideAdapters();
 
 var app = builder.Build();
 
