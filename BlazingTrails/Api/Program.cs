@@ -4,6 +4,22 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//Add Cors policy
+
+const string corsNamePolicy = "BlazingTrailsCors";
+
+builder.Services.AddCors(options =>
+{
+ if (builder.Environment.IsDevelopment())
+ {
+  options.AddPolicy(name: corsNamePolicy, policy =>
+  {
+   policy.WithHeaders("*");
+   policy.WithOrigins("https://localhost:7013");
+  } );
+ }
+});
+
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("BlazingTrailsContext");
 builder.Services.AddDbContext<BlazingTrailsContext>(options => options.UseSqlite(connectionString));
@@ -36,6 +52,12 @@ app.UseRouting();
 /*
  *  End
  */
+
+/*
+ * Use Cors for API
+ */
+
+app.UseCors(corsNamePolicy);
 
 //app.UseAuthorization();
 app.MapControllers();
