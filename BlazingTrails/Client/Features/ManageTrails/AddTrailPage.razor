@@ -41,7 +41,7 @@
     <FormSection Title="Difficulty"
                  HelpText="Help other hikers out by telling them the length of the trail is how long it might take them.">
         <FormFieldSet Width="col-3">
-            <label for="trailLength" class="font-weight-bold text-secondary">Length (km)</label>
+            <label for="trailLength" class="font-weight-bold text-secondary">Length (Km)</label>
             <InputNumber TValue="int" @bind-Value="_trail.Length" class="form-control" id="trailLength"/>
             <ValidationMessage For="@(() => _trail.Length)" />
         </FormFieldSet>
@@ -69,8 +69,9 @@
                             <label for="routeInstructionDescription">Description</label>
                             <InputText id="routeInstructionDescription"
                                        class="form-control"
-                                       @bind-Value=@route.Description/>
-
+                                       @bind-Value="@route.Description">
+                            </InputText>
+                            <ValidationMessage For="@(() => route.Description)" /> 
                         </div>
                     </div>
                     <div class="col-1 d-flex mt-3">
