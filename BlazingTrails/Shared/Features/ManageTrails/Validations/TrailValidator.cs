@@ -12,5 +12,6 @@ public class TrailValidator : AbstractValidator<TrailDto>
         RuleFor(x => x.Length).GreaterThan(0).WithMessage("Please enter a length");
         RuleFor(x => x.Routes).NotEmpty().WithMessage("Please add a route instruction");
         RuleForEach(x => x.Routes).SetValidator(new RouteInstructionValidator());
+        
     }
 }

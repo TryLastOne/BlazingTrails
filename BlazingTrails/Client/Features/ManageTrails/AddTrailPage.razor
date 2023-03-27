@@ -4,6 +4,7 @@
 
 @using BlazingTrails.Shared.Features.ManageTrails
 @using BlazingTrails.Shared.Features.ManageTrails.Requests
+@using BlazingTrails.Client.Validation
 <PageTitle>Add Trail - Blazing Trails</PageTitle>
 
 <nav aria-label="breadcrumb">
@@ -36,7 +37,7 @@ else if (_errorMessage is not null)
     </div>
 }
 
-<EditForm Model="@_trail" OnValidSubmit="OnAddTrail">
+<EditForm EditContext="_addTrailEditContext" OnValidSubmit="OnAddTrail">
     <FluentValidationValidator/>
     <FormSection Title="Basic Details"
                  HelpText="This information is used to identity the trail and can be searched to help hikers find it.">
@@ -116,6 +117,7 @@ else if (_errorMessage is not null)
                         @onclick="@(() => _trail.Routes.Add(new RouteInstructionDto()))">
                     Add Instruction
                 </button>
+                <ValidationMessage For="@(() => _trail.Routes)"></ValidationMessage>
             </div>
 
         </div>
@@ -136,9 +138,16 @@ else if (_errorMessage is not null)
 
 @code {
 
+    private EditContext _addTrailEditContext = default!;
     private TrailDto _trail = new();
     private bool _submitSuccessful;
     private string? _errorMessage;
+
+    protected override void OnInitialized()
+    {
+        _addTrailEditContext = new EditContext(_trail);
+        _addTrailEditContext.SetFieldCssClassProvider(new BootstrapFieldCssClassProvider());
+    }
 
     private async Task OnAddTrail()
     {
