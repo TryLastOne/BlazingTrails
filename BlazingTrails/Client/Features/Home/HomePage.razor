@@ -1,4 +1,6 @@
 @page "/"
+@using BlazingTrails.Shared.Features.ManageTrails.Requests
+@inject IMediator Mediator
 
 @inject HttpClient Http
 <PageTitle>Blazing Trails</PageTitle>
@@ -9,26 +11,59 @@
 }
 else
 {
-    <TrailDetails Trail="SelectedTrail" />
-    <TrailSearch />
-    <div class="grid">
-        @foreach (var trail in _trails)
-        {
-            <TrailCard Trail="trail" OnSelected="HandleTrailSelected" />
-        }
-    </div>
+    if (_trails.Any())
+    {
+        <TrailDetails Trail="SelectedTrail" />
+        <TrailSearch />
+        <div class="grid">
+            @foreach (var trail in _trails)
+            {
+                <TrailCard Trail="trail" OnSelected="HandleTrailSelected" />
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info">
+            No Trails found.
+        </div>
+    }
 }
 
 @code {
    
     private Trail? SelectedTrail { get; set; }
-    private IEnumerable<Trail>? _trails;
+    private List<Trail>? _trails;
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            _trails = await Http.GetFromJsonAsync<IEnumerable<Trail>>("trails/trails.json");
+            var response = await Mediator.Send(new GetTrailsRequest(), CancellationToken.None);
+            if (response.Trails.Any())
+            {
+                _trails = new List<Trail>();
+                _trails.AddRange(response.Trails.Select(item => new Trail
+                {
+                    Id = item.Id,
+                    Name = item.Name,
+                    Description = item.Description,
+                    Location = item.Location,
+                    Length = item.Length,
+                    TimeInMinutes = item.TimeInMinutes,
+                    Route = item.Routes.Select(route => new RouteInstruction
+                    {
+                        Id = route.Id,
+                        Stage = route.Stage,
+                        Description = route.Description
+                    })
+                }));
+            }
+            else
+            {
+                _trails = new List<Trail>();
+            }
+        
         }
         catch (Exception ex)
         {

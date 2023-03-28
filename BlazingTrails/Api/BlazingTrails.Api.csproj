@@ -7,6 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Folder Include="Images" />
       <Folder Include="Persistence\Data" />
     </ItemGroup>
 
@@ -20,6 +21,7 @@
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
+      <PackageReference Include="SixLabors.ImageSharp" Version="3.0.0" />
     </ItemGroup>
 
     <ItemGroup>     

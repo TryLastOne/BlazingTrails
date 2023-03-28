@@ -1,6 +1,8 @@
+using BlazingTrails.Api.Extensions;
 using BlazingTrails.Api.Persistence;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,6 +49,11 @@ app.UseBlazorFrameworkFiles();
 
 //enables static files to be served by API
 app.UseStaticFiles();
+
+//Serve Images folder to client as static file
+var imageDir = new DirectoryInfo(Path.Combine(Directory.GetCurrentDirectory(), "Images"));
+app.ServeStaticFolder(imageDir, "Images");
+
 app.UseRouting();
 
 /*

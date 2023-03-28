@@ -60,6 +60,14 @@ else if (_errorMessage is not null)
             <InputText id="trailLocation" @bind-Value="@_trail.Location" class="form-control"/>
             <ValidationMessage For="@(() => _trail.Location)"/>
         </FormFieldSet>
+        
+        <FormFieldSet Width="col-6">
+            <label for="trailImage" class="font-weight-bold text-secondary">
+                Image
+            </label>
+            <InputFile id="trailImage" OnChange="LoadTrailImage" class="form-control-file"
+                       accept=".png,.jpg,.jpeg" />
+        </FormFieldSet>
     </FormSection>
 
     <FormSection Title="Difficulty"
@@ -68,6 +76,11 @@ else if (_errorMessage is not null)
             <label for="trailLength" class="font-weight-bold text-secondary">Length (Km)</label>
             <InputNumber TValue="int" @bind-Value="_trail.Length" class="form-control" id="trailLength"/>
             <ValidationMessage For="@(() => _trail.Length)"/>
+        </FormFieldSet>
+        <FormFieldSet Width="col-5">
+            <label for="trailTime" class="font-weight-bold text-secondary">Time</label>
+            <InputTime id="trailTime" @bind-Value="@_trail.TimeInMinutes" />
+            <ValidationMessage For="@(() => _trail.TimeInMinutes)" />
         </FormFieldSet>
     </FormSection>
 
@@ -139,6 +152,7 @@ else if (_errorMessage is not null)
 @code {
 
     private EditContext _addTrailEditContext = default!;
+    private IBrowserFile? _trailImage;
     private TrailDto _trail = new();
     private bool _submitSuccessful;
     private string? _errorMessage;
@@ -159,8 +173,43 @@ else if (_errorMessage is not null)
             _submitSuccessful = false;
             return;
         }
+
+        if (_trailImage is null)
+        {
+            _submitSuccessful = true;
+            ResetForm();
+            return;
+        }
+
+        await ProcessImage(response.TrailId);
+
+
+    }
+
+    private void ResetForm()
+    {
         _trail = new TrailDto();
         _errorMessage = null;
+        _addTrailEditContext = new EditContext(_trail);
+        _addTrailEditContext.SetFieldCssClassProvider(new BootstrapFieldCssClassProvider());
+        _trailImage = null;
+    }
+
+    private async Task ProcessImage(int trailId)
+    {
+        var imageUpload = await Mediator.Send(new UploadTrailImageRequest(trailId, _trailImage));
+        if(string.IsNullOrWhiteSpace(imageUpload.ImageName))
+        {
+            _errorMessage = "Your trail was saved, but there was a problem uploading image";
+            return;
+        }
+
         _submitSuccessful = true;
+        ResetForm();
+    }
+
+    private void LoadTrailImage(InputFileChangeEventArgs e)
+    {
+        _trailImage = e.File;
     }
 }

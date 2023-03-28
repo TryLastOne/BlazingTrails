@@ -3,6 +3,7 @@ obj/
 .idea/
 .vs/
 node_modules/
+Images/
 package-lock.json
 appsettings.*.json
 .DS_Store
