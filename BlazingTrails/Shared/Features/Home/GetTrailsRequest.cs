@@ -1,6 +1,7 @@
+using BlazingTrails.Shared.Features.ManageTrails.Shared;
 using MediatR;
 
-namespace BlazingTrails.Shared.Features.ManageTrails.Requests;
+namespace BlazingTrails.Shared.Features.Home;
 
 public record GetTrailsRequest : IRequest<GetTrailsRequest.Response>
 {

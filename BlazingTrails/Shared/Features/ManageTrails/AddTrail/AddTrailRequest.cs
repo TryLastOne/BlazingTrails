@@ -1,6 +1,7 @@
+using BlazingTrails.Shared.Features.ManageTrails.Shared;
 using MediatR;
 
-namespace BlazingTrails.Shared.Features.ManageTrails.Requests;
+namespace BlazingTrails.Shared.Features.ManageTrails.AddTrail;
 
 public record AddTrailRequest(TrailDto Trail) : IRequest<AddTrailRequest.Response>
 {

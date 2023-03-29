@@ -1,7 +1,7 @@
-using BlazingTrails.Shared.Features.ManageTrails.Requests;
+using BlazingTrails.Shared.Features.ManageTrails.Validations;
 using FluentValidation;
 
-namespace BlazingTrails.Shared.Features.ManageTrails.Validations.Requests;
+namespace BlazingTrails.Shared.Features.ManageTrails.AddTrail;
 
 public class AddTrailRequestValidator : AbstractValidator<AddTrailRequest>
 {

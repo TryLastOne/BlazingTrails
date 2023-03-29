@@ -6,6 +6,8 @@ public static class WebAppExtensions
 {
     public static void ServeStaticFolder(this WebApplication? application, DirectoryInfo directoryInfo, string requestPath)
     {
+        if (application is null) return;
+        
         if (!directoryInfo.Exists)
         {
             directoryInfo.Create();

@@ -1,3 +1,4 @@
+using BlazingTrails.Shared.Features.ManageTrails.Shared;
 using FluentValidation;
 
 namespace BlazingTrails.Shared.Features.ManageTrails.Validations;
