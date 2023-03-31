@@ -33,7 +33,9 @@
     <Exec Command="npm run sass -- %(ScopedScssFiles.Identity) %(relativedir)%(filename).css" />    
   </Target>
   
-  <PropertyGroup Condition=" '$(RunConfiguration)' == 'Client' " />
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'Client' ">
+    <ExternalConsole>true</ExternalConsole>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Blazored.FluentValidation" Version="2.1.0" />
     <PackageReference Include="MediatR" Version="12.0.1" />
@@ -49,11 +51,15 @@
     <None Remove="Features\" />
     <None Remove="Features\Layout\" />
     <None Remove="Features\Home\" />
+    <None Remove="Features\Home\Search\" />
+    <None Remove="Features\Home\Share\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Features\" />
     <Folder Include="Features\Layout\" />
     <Folder Include="Features\Home\" />
+    <Folder Include="Features\Home\Search\" />
+    <Folder Include="Features\Home\Shared\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Shared\BlazingTrails.Shared.csproj" />

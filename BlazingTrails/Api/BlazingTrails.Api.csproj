@@ -6,6 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
 
+    <PropertyGroup Condition=" '$(RunConfiguration)' == 'API' " />
     <ItemGroup>
       <Folder Include="Images" />
       <Folder Include="Persistence\Data" />
