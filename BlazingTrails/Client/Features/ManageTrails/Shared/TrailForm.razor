@@ -37,9 +37,9 @@
             else
             {
                 <div class="card bg-dark text-white">
-                    <img src="https://localhost:7033/images/@_trail.Image" alt="Trail Image"/>
+                    <img src="@(_trail.ToImageUrl())" alt="Trail Image"/>
                     <div class="card-img-overlay">
-                        <button class="btn btn-primary btn-sm" @onclick="RemoveTrailImage">Remove</button>
+                        <button class="btn btn-primary btn-sm" @onclick="RemoveTrailImage" type="button">Remove</button>
                     </div>
                 </div>
             }
@@ -137,6 +137,9 @@
 
     [Parameter, EditorRequired]
     public Func<TrailDto, IBrowserFile?, Task> OnSubmit { get; set; } = default!;
+    
+    [Parameter]
+    public EventCallback<ImageAction> OnImageActionChanged { get; set; }
 
     protected override void OnInitialized()
     {
@@ -183,12 +186,13 @@
     {
         _trailImage = e.File;
         _trail.ImageAction = ImageAction.Add;
+        OnImageActionChanged.InvokeAsync(ImageAction.Add);
     }
 
     private void RemoveTrailImage()
     {
         _trailImage = null;
         _trail.ImageAction = ImageAction.Remove;
+        OnImageActionChanged.InvokeAsync(ImageAction.Remove);
     }
-
 }

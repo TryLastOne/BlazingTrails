@@ -1,4 +1,4 @@
-namespace BlazingTrails.Client.Features.Home;
+namespace BlazingTrails.Client.Features.Home.Shared;
 
 public class Trail
 {
@@ -7,9 +7,7 @@ public class Trail
     public string Description { get; set; } = string.Empty;
     public string Image { get; set; } = string.Empty;
     public string Location { get; set; } = string.Empty;
-    public int TimeInMinutes { get; set; } = 0;
+    public int TimeInMinutes { get; set; }
     public string TimeFormatted => $"{TimeInMinutes / 60}h {TimeInMinutes % 60}m";
     public int Length { get; set; }
-    public IEnumerable<RouteInstruction> Route { get; set; } = Array.Empty<RouteInstruction>();
-
 }

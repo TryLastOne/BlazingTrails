@@ -15,7 +15,18 @@ public class EditTrailRequestHandler : IRequestHandler<EditTrailRequest, EditTra
     
     public async Task<EditTrailRequest.Response> Handle(EditTrailRequest request, CancellationToken cancellationToken)
     {
-        var response = await _httpClient.PutAsJsonAsync(EditTrailRequest.RouteTemplate, request, cancellationToken);
-        return response.IsSuccessStatusCode ? new EditTrailRequest.Response(true) : new EditTrailRequest.Response(false);
+        try
+        {
+            var response = await _httpClient.PutAsJsonAsync(EditTrailRequest.RouteTemplate.Replace("{trailId}", request.Trail.Id.ToString()), request, cancellationToken);
+            return response.IsSuccessStatusCode ? new EditTrailRequest.Response(true) : new EditTrailRequest.Response(false);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+            
+        }
+
+        return new EditTrailRequest.Response(false);
+
     }
 }

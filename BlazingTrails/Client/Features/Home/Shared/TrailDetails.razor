@@ -4,7 +4,7 @@
         @if (ActiveTrail is not null)
         {
             <div class="drawer-content">
-                <img src="@ActiveTrail.Image" alt=""/>
+                <img src="@(ActiveTrail.ToImageUrl())" alt="@ActiveTrail.Name"/>
                 <div class="trail-details">
                     <h3>@ActiveTrail.Name</h3>
                     <h6 class="mb-3 text-muted"><span class="oi oi-map-marker"></span> @ActiveTrail.Location</h6>

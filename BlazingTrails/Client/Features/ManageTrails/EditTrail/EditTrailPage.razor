@@ -1,8 +1,6 @@
 @page "/edit-trail/{TrailId:int}"
 
 @inject IMediator Mediator
-
-@using BlazingTrails.Client.Features.ManageTrails.Shared
 @using BlazingTrails.Shared.Features.ManageTrails.EditTrail
 @using BlazingTrails.Shared.Features.ManageTrails.Shared
 <PageTitle>Edit Trail - Blazing Trails</PageTitle>
@@ -32,7 +30,7 @@ else
         <ErrorAlert Message="@_errorMessage"/>
     }
 
-    <TrailForm Trail="_trail" OnSubmit="OnEditTrail" />
+    <TrailForm Trail="_trail" OnSubmit="OnEditTrail" OnImageActionChanged="OnImageChanged"/>
 }
 
 @code {
@@ -54,6 +52,7 @@ else
         _trail.Description = response.Trail.Description;
         _trail.Location = response.Trail.Location;
         _trail.Image = response.Trail.Image;
+        _trail.Length = response.Trail.Length;
         _trail.TimeInMinutes = response.Trail.TimeInMinutes;
         _trail.Routes.Clear();
         _trail.Routes.AddRange(response.Trail.RouteInstructions.Select(routeInstruction => new RouteInstructionDto
@@ -72,7 +71,6 @@ else
         {
             _errorMessage = "There was a problem saving your trail.";
             _submitSuccessful = false;
-          
         }
 
         _trail.Name = trail.Name;
@@ -80,30 +78,23 @@ else
         _trail.Location = trail.Location;
         _trail.Length = trail.Length;
         _trail.TimeInMinutes = trail.TimeInMinutes;
+        _trail.Routes.Clear();
         _trail.Routes.AddRange(trail.Routes.Select(route => new RouteInstructionDto
         {
             Stage = route.Stage,
             Description = route.Description
         }));
 
-        if (trailImage is null)
+        switch (trail.ImageAction)
         {
-            _errorMessage = "There was a problem saving your trail.";
-            _submitSuccessful = false;
+            case ImageAction.Add:
+                _submitSuccessful = await ProcessImage(trail.Id, trailImage);
+                break;
+            case ImageAction.Remove:
+                _trail.Image = string.Empty;
+                break;
         }
-        else
-        {
-            _submitSuccessful = true;
-            switch (trail.ImageAction)
-            {
-                case ImageAction.Add:
-                    _submitSuccessful = await ProcessImage(trail.Id, trailImage);
-                    break;
-                case ImageAction.Remove:
-                    _trail.Image = string.Empty;
-                    break;
-            }
-        }
+        _submitSuccessful = true;
 
         StateHasChanged();
     }
@@ -119,4 +110,12 @@ else
         _trail.Image = imageUploadResponse.ImageName;
         return true;
     }
+
+    private void OnImageChanged(ImageAction imageAction)
+    {
+        if (imageAction != ImageAction.Remove) return;
+        _trail.Image = null;
+        _trail.ImageAction = ImageAction.Remove;
+    }
+
 }

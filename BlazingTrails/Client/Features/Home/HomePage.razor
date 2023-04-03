@@ -1,9 +1,10 @@
 @page "/"
-@using BlazingTrails.Shared.Features.ManageTrails.AddTrail
-@using BlazingTrails.Shared.Features.Home
+@using System.Net.Mime
+
+
+
 @inject IMediator Mediator
 
-@inject HttpClient Http
 <PageTitle>Blazing Trails</PageTitle>
 
 @if (_trails is null)
@@ -12,27 +13,41 @@
 }
 else
 {
+    <TrailDetails Trail="SelectedTrail" />
+    <TrailSearch />
     if (_trails.Any())
     {
-        <TrailDetails Trail="SelectedTrail" />
-        <TrailSearch />
+       
+        <div class="mb-4">
+            <p class="font-italic text-center">Do you have an awesome trail you'd like to share? <a href="add-trail">Add it here</a>.</p>
+        </div>
         <div class="grid">
             @foreach (var trail in _trails)
             {
-                <TrailCard Trail="trail" OnSelected="HandleTrailSelected" />
+                <TrailCard Trail="trail" OnSelected="HandleTrailSelected"/>
             }
         </div>
     }
     else
     {
-        <div class="alert alert-info">
-            No Trails found.
+        <div class="no-trail">
+            <svg viewBox="0 0 16 16" class="bi bi-tree" fill="currentColor"
+                 xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M8 0a.5.5 0 0 1 .416.223l3 4.5A.5.5 0 0 1 11 5.5h-.098l2.022 3.235a.5.5 0 0 1-.424.765h-.191l1.638 3.276a.5.5 0 0 1-.447.724h-11a.5.5 0 0 1-.447-.724L3.69 9.5H3.5a.5.5 0 0 1-.424-.765L5.098 5.5H5a.5.5 0 0 1-.416-.777l3-4.5A.5.5 0 0 1 8 0zM5.934 4.5H6a.5.5 0 0 1 .424.765L4.402 8.5H4.5a.5.5 0 0 1 .447.724L3.31 12.5h9.382l-1.638-3.276A.5.5 0 0 1 11.5 8.5h.098L9.576 5.265A.5.5 0 0 1 10 4.5h.066L8 1.401 5.934 4.5z"/>
+                <path d="M7 13.5h2V16H7v-2.5z"/>
+            </svg>
+            <h3 class="text-muted font-weight-light">
+                We've currently don't have any trails,
+                <a href="add-trail">
+                    Why not add one?
+                </a>
+            </h3>
         </div>
     }
 }
 
 @code {
-   
+
     private Trail? SelectedTrail { get; set; }
     private List<Trail>? _trails;
 
@@ -49,25 +64,20 @@ else
                     Id = item.Id,
                     Name = item.Name,
                     Description = item.Description,
+                    Image = item.Image,
                     Location = item.Location,
                     Length = item.Length,
-                    TimeInMinutes = item.TimeInMinutes,
-                    Route = item.Routes.Select(route => new RouteInstruction
-                    {
-                        Id = route.Id,
-                        Stage = route.Stage,
-                        Description = route.Description
-                    })
+                    TimeInMinutes = item.TimeInMinutes
                 }));
             }
             else
             {
                 _trails = new List<Trail>();
             }
-        
         }
         catch (Exception ex)
         {
+            _trails = new List<Trail>();
             Console.WriteLine($"There was a problem loading trail data: {ex.Message}");
         }
     }
@@ -76,4 +86,5 @@ else
     {
         SelectedTrail = trail;
     }
+
 }

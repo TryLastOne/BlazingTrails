@@ -58,8 +58,6 @@
     <Folder Include="Features\" />
     <Folder Include="Features\Layout\" />
     <Folder Include="Features\Home\" />
-    <Folder Include="Features\Home\Search\" />
-    <Folder Include="Features\Home\Shared\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Shared\BlazingTrails.Shared.csproj" />
